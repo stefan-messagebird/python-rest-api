@@ -5,6 +5,7 @@ import enum
 
 from messagebird.balance import Balance
 from messagebird.call import Call
+from messagebird.call_list import CallList
 from messagebird.contact import Contact, ContactList
 from messagebird.error import Error
 from messagebird.group import Group, GroupList
@@ -124,6 +125,18 @@ class Client(object):
         """Retrieve the information of a specific call"""
         return Call().load(self.request('calls/' + str(id), 'GET', None, VOICE_TYPE))
 
+    def call_list(self, page=1):
+        """Listing calls
+
+        Args:
+            page(int)               : The page to list.
+        Raises:
+            ErrorException          : On api returning errors
+
+        Returns:
+            CallList(object)        : The list of calls requested & their status."""
+        return CallList().load(self.request('calls/?page=' + str(page), 'GET', None, VOICE_TYPE))
+
     def call_create(self, source, destination, callFlow, webhook):
         """Creating a call
 
@@ -133,11 +146,10 @@ class Client(object):
             callFlow(object)        : The call flow object to be executed when the call is answered.
             webhook(object)         : The webhook object containing the url & required token.
         Raises:
-            ErrorException:         On api returning errors
+            ErrorException          : On api returning errors
 
         Returns:
-            If successful, this request will return an object with a data property, which is an array that has a single
-            call object. If the request failed, an error object will be returned."""
+            Call(object)            : The Call object just created."""
 
         params = locals()
         del(params['self'])
