@@ -51,6 +51,10 @@ class ErrorException(Exception):
         message = ' '.join([str(e) for e in self.errors])
         super(ErrorException, self).__init__(message)
 
+class SignleErrorException(Exception):
+    def __init__(self, errorMessage):
+        super(SignleErrorException, self).__init__(errorMessage)
+
 class Feature(enum.Enum):
         ENABLE_CONVERSATIONS_API_WHATSAPP_SANDBOX = 1
 
@@ -154,6 +158,14 @@ class Client(object):
         params = locals()
         del(params['self'])
         return Call().load(self.request('calls', 'POST', params, VOICE_TYPE))
+
+    def call_delete(self, id):
+        """Delete an existing call object."""
+        response = self.request_plain_text('calls/' + str(id), 'DELETE', None, VOICE_TYPE)
+
+        # successful delete should be empty
+        if len(response) > 0:
+            raise SignleErrorException(response)
 
     def hlr(self, id):
         """Retrieve the information of a specific HLR lookup."""

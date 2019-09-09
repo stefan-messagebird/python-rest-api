@@ -165,6 +165,14 @@ class TestCall(unittest.TestCase):
         # check it can be formatted as string
         self.assertTrue(len(str(call_creation_response)) > 0, 'Check returned call can be formatted as string.')
 
+    def test_call_delete(self):
+        http_client = Mock()
+        http_client.request.return_value = ''
+        call_id_to_delete = '21025ed1-cc1d-4554-ac05-043fa6c84e00'
+        Client('', http_client).call_delete(call_id_to_delete)
+
+        http_client.request.assert_called_once_with('calls/%s' % call_id_to_delete, 'DELETE', None)
+
     @staticmethod
     def create_expected_call_data_based_on_api_response(api_response):
         expected_data = api_response['data'][0]
