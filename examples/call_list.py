@@ -42,7 +42,7 @@ try:
         print('  With an empty response.')
 
 except messagebird.client.ErrorException as e:
-    print('\nAn error occurred while creating a call:\n')
+    print('\nAn error occurred while listing calls:\n')
 
     for error in e.errors:
         print('  code        : %d' % error.code)
@@ -51,14 +51,14 @@ except messagebird.client.ErrorException as e:
         print('  type        : %s' % error.__class__)
 
 except requests.exceptions.HTTPError as e:
-    print('\nAn http exception occurred while creating a call:')
+    print('\nAn HTTP exception occurred while listing calls:')
     print(' ', e)
     print('  Http request body: ', e.request.body)
     print('  Http response status: ', e.response.status_code)
     print('  Http response body: ', e.response.content.decode())
 
-# except Exception as e:
-#     print('\nAn ', e.__class__, ' exception occurred while creating a call:')
-#     print(e)
+except Exception as e:
+    print('\nAn ', e.__class__, ' exception occurred while creating a call:')
+    print(e)
 
 
